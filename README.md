@@ -28,7 +28,23 @@ A [KOReader](https://koreader.rocks) plugin that turns a jailbroken Kindle's sle
 - The Kindle must **not show lock-screen ads** (Special Offers). On ad-supported Kindles, KOReader can't draw its own sleep screen.
 - **Wi-Fi** switched on in the Kindle's settings. You don't need to be connected when the Kindle goes to sleep; the plugin connects by itself for each refresh.
 
-Tested on a **Kindle Paperwhite 3 (7th gen)**, firmware 5.16.2.1.1, with KOReader v2026.07.1. The timed Wi-Fi handling uses Kindle-specific tools (`wpa_cli`, `udhcpc`, `lipc`), so other Kindle models may behave differently, and non-Kindle devices aren't supported for timed refreshes.
+See [Compatibility](#compatibility) for which devices are supported.
+
+## Compatibility
+
+Only the **Kindle Paperwhite 3 (7th gen)**, firmware 5.16.2.1.1 with KOReader v2026.07.1, has been tested. The other rows are based on what each part of the plugin depends on:
+
+- **Sleep screen:** uses standard KOReader widgets and adapts to the screen size.
+- **Downloads:** use KOReader's ordinary network code.
+- **Timed refresh while asleep:** uses the Kindle power daemon (`lipc`/`powerd`) and Kindle tools (`wpa_cli`, `udhcpc`, `wlan0`) to bring Wi-Fi up in screensaver mode.
+
+| Device | Sleep screen | Refresh now / before sleep | Timed refresh while asleep |
+|---|---|---|---|
+| Kindle Paperwhite 3 (7th gen) | ✓ tested | ✓ tested | ✓ tested |
+| Other jailbroken Kindles without ads (firmware 5.x) | Expected to work | Expected to work | Untested: the same tools are present, but power management may differ between models |
+| Kindles with lock-screen ads (Special Offers) | ✗ KOReader can't draw its own sleep screen | – | ✗ |
+| Kobo | Expected to work | Partly: a Kobo may go to sleep before the before-sleep refresh finishes | ✗ the Wi-Fi handling is Kindle-specific |
+| PocketBook, Android, reMarkable | Expected to work | Expected to work | ✗ no timed wake-up |
 
 ## Installation
 
