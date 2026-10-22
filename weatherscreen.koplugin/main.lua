@@ -30,10 +30,14 @@ local WeatherScreen = WidgetContainer:extend{
     is_doc_only = false,
 }
 
-local function onScheduledWake()
+local function startRefresh()
     if active_plugin then
         active_plugin:startBackgroundRefresh()
     end
+end
+
+local function onScheduledWake()
+    UIManager:nextTick(startRefresh)
 end
 
 SleepScreen.install({
@@ -139,7 +143,7 @@ function WeatherScreen:onSuspend()
     local forecast = self.settings:readSetting("forecast")
     if self:isEnabled() and Schedule.shouldRefreshBeforeSleep(forecast and forecast.fetched_at, os.time())
         and Wifi.isConnected() then
-        UIManager:scheduleIn(Constants.SLEEP_REFRESH_DELAY_SECONDS, onScheduledWake)
+        UIManager:scheduleIn(Constants.SLEEP_REFRESH_DELAY_SECONDS, startRefresh)
     end
 end
 
